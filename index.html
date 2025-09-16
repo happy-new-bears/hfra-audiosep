@@ -10,7 +10,6 @@
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
 
-
   <meta name="twitter:title" content="Audio-Visual Separation with Hierarchical Fusion and Representation Alignment">
   <meta name="twitter:description" content="A new approach for self-supervised audio-visual separation using hierarchical fusion and representation alignment.">
   <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
@@ -18,18 +17,15 @@
   <meta name="keywords" content="audio-visual separation, deep learning, hierarchical fusion, representation alignment, self-supervised learning, BMVC">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
   <title>Audio-Visual Separation with Hierarchical Fusion and Representation Alignment</title>
   <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-  rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
   <link rel="stylesheet" href="static/css/bulma.min.css">
   <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="static/css/index.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -38,9 +34,119 @@
   <script src="static/js/bulma-carousel.min.js"></script>
   <script src="static/js/bulma-slider.min.js"></script>
   <script src="static/js/index.js"></script>
+
+  <!-- Styles for the qualitative results grid -->
+  <style>
+    /* 结果网格样式 */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 160px repeat(5, minmax(160px, 1fr));
+      gap: 12px;
+      align-items: start;
+    }
+    .results-colheader, .results-rowheader {
+      font-weight: 600;
+      background: #f5f6f7;
+      border: 1px solid #e6e6e6;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .results-colheader { text-align: center; }
+    .results-rowheader { position: sticky; left: 0; z-index: 1; }
+    .result-cell {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e6e6e6;
+      /*background: #0a0f20;*/
+    }
+    .result-cell img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      aspect-ratio: 1/1;
+    }
+    .play-btn {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.55);
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .play-btn:hover { background: rgba(0,0,0,0.7); }
+    @media (max-width: 820px) {
+      .results-grid { grid-template-columns: 120px repeat(5, minmax(120px, 1fr)); }
+      .results-colheader, .results-rowheader { font-size: 14px; }
+    }
+    /* 更瘦的进度条，仅作用于 .mini-seek */
+.mini-seek {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 10px;             /* 元素本身高度（可继续调小） */
+  background: transparent;  /* 透明，下面用 track 来画线 */
+  padding: 0;
+  margin: 0;
+}
+
+/* WebKit (Chrome/Edge/Safari) */
+.mini-seek::-webkit-slider-runnable-track {
+  height: 4px;              /* 轨道厚度 */
+  border-radius: 999px;
+  background: #e5e7eb;      /* 可不改颜色 */
+}
+.mini-seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;              /* 拇指大小 */
+  height: px;
+  border-radius: 50%;
+  background: #4b5563;      /* 可不改颜色 */
+  margin-top: -4px;         /* 垂直居中：-(thumb - track)/2 = -(12-4)/2 */
+}
+
+/* Firefox */
+.mini-seek::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: #e5e7eb;
+}
+.mini-seek::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #4b5563;
+  border: none;
+}
+
+/* 旧版 IE/Edge (可选) */
+.mini-seek::-ms-track {
+  height: 4px;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.mini-seek::-ms-fill-lower,
+.mini-seek::-ms-fill-upper {
+  height: 4px;
+  border-radius: 999px;
+  background: #e5e7eb;
+}
+.mini-seek::-ms-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #4b5563;
+}
+
+  </style>
 </head>
 <body>
-
 
   <section class="hero">
     <div class="hero-body">
@@ -49,19 +155,12 @@
           <div class="column has-text-centered">
             <h1 class="title is-1 publication-title">Audio-Visual Separation with Hierarchical Fusion and Representation Alignment</h1>
             <div class="is-size-5 publication-authors">
-              <span class="author-block">
-                <a href="#" target="_blank">Han Hu</a><sup>*</sup>,</span>
-                <span class="author-block">
-                  <a href="#" target="_blank">Dongheng Lin</a><sup>*</sup>,</span>
-                <span class="author-block">
-                  <a href="#" target="_blank">Qiming Huang</a>,</span>
-                <span class="author-block">
-                  <a href="#" target="_blank">Yuqi Hou</a>,</span>
-                <span class="author-block">
-                  <a href="#" target="_blank">Hyung Jin Chang</a>,</span>
-                <span class="author-block">
-                  <a href="#" target="_blank">Jianbo Jiao</a>
-              </span>
+              <span class="author-block"><a href="#" target="_blank">Han Hu</a><sup>*</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Dongheng Lin</a><sup>*</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Qiming Huang</a>,</span>
+              <span class="author-block"><a href="#" target="_blank">Yuqi Hou</a>,</span>
+              <span class="author-block"><a href="#" target="_blank">Hyung Jin Chang</a>,</span>
+              <span class="author-block"><a href="#" target="_blank">Jianbo Jiao</a></span>
             </div>
 
             <div class="is-size-5 publication-authors">
@@ -72,122 +171,363 @@
             <div class="column has-text-centered">
               <div class="publication-links">
                 <span class="link-block">
-                  <a href="static/pdfs/BMVC_Han_final.pdf" target="_blank"
-                  class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                    <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-
-              <span class="link-block">
-                <a href="https://github.com/happy-new-bears/AVSep-HFRA" target="_blank"
-                class="external-link button is-normal is-rounded is-dark">
-                <span class="icon">
-                  <i class="fab fa-github"></i>
+                  <a href="static/pdfs/BMVC_Han_final.pdf" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span>
+                  </a>
                 </span>
-                <span>Code</span>
-              </a>
-            </span>
-
+                <span class="link-block">
+                  <a href="https://github.com/happy-new-bears/AVSep-HFRA" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
+                  </a>
+                </span>
+              </div>
             </div>
+
+          </div><!-- /column -->
         </div>
       </div>
     </div>
-  </div>
-</div>
-</section>
+  </section>
 
-<section class="section hero is-light">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Self-supervised audio-visual source separation leverages natural correlations between audio and vision modalities to separate mixed audio signals. In this work, we first systematically analyze the performance of existing multimodal fusion methods for audio-visual separation task, demonstrating that the performance of different fusion strategies is closely linked to the characteristics of the sound-middle fusion is better suited for handling short, transient sounds, while late fusion is more effective for capturing sustained and harmonically rich sounds. We thus propose a hierarchical fusion strategy that effectively integrates both fusion stages. In addition, training can be made easier by incorporating high-quality external audio representations, rather than relying solely on the audio branch to learn them independently. To explore this, we propose a representation alignment approach that aligns the latent features of the audio encoder with embeddings extracted from pre-trained audio models. Extensive experiments on MUSIC, MUSIC-21 and VGGSound datasets demonstrate that our approach achieves state-of-the-art results, surpassing existing methods under the self-supervised setting. We further analyze the impact of representation alignment on audio features, showing that it reduces modality gap between the audio and visual modalities. 
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Self-supervised audio-visual source separation leverages natural correlations between audio and vision modalities to separate mixed audio signals. In this work, we first systematically analyze the performance of existing multimodal fusion methods for audio-visual separation task, demonstrating that the performance of different fusion strategies is closely linked to the characteristics of the sound—middle fusion is better suited for handling short, transient sounds, while late fusion is more effective for capturing sustained and harmonically rich sounds. We thus propose a hierarchical fusion strategy that effectively integrates both fusion stages. In addition, training can be made easier by incorporating high-quality external audio representations, rather than relying solely on the audio branch to learn them independently. To explore this, we propose a representation alignment approach that aligns the latent features of the audio encoder with embeddings extracted from pre-trained audio models. Extensive experiments on MUSIC, MUSIC-21 and VGGSound datasets demonstrate that our approach achieves state-of-the-art results, surpassing existing methods under the self-supervised setting. We further analyze the impact of representation alignment on audio features, showing that it reduces modality gap between the audio and visual modalities.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-small">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Relationship Between Acoustic Properties and Fusion</h2>
+      <div class="columns is-centered">
+        <div class="column">
+          <img src="static/images/figure1.png" alt="Relationship between Acoustic Properties of Musical Instruments and Fusion Strategies" style="width:100%;">
+          <h2 class="subtitle has-text-centered">
+            Relationship Between Acoustic Properties of Musical Instruments and Fusion Strategies. Instruments with shorter transient properties and simpler harmonic structures are more suited to middle fusion. Conversely, instruments with sustained notes and complex harmonic structures benefit more from late fusion.
+          </h2>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-small is-light">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Model Overview</h2>
+      <div class="columns is-centered">
+        <div class="column">
+          <img src="static/images/figure2.png" alt="Pipeline of our proposed method" style="width:100%;">
+          <h2 class="subtitle has-text-centered">
+            Pipeline of our proposed method. The pipeline consists of three key components: audio-visual feature extraction, hierarchical fusion, and representation alignment. It takes an audio mixture and corresponding video frames as input.
+          </h2>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== RESULTS ===================== -->
+  <section class="section hero is-small">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Results</h2>
+
+      <!-- ------- Qualitative Results (with audio buttons) ------- -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h3 class="title is-4">Qualitative Results</h3>
+
+          <!-- Grid container -->
+          <div id="results-grid" class="results-grid" aria-label="Qualitative Results Grid">
+            <!-- 顶部左上角空白占位 -->
+            <div class="results-colheader" style="visibility:hidden;">&nbsp;</div>
+            <!-- 顶部列名会由脚本填充 -->
+          </div>
+
+          <p class="subtitle">
+            Click ●  to play the audio example. Our method (row “Ours”) produces cleaner separated sounds than CLIPSep.
           </p>
+
+          <!-- 一个共享的音频播放器 -->
+          <audio id="av-player" preload="none"></audio>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<section class="section hero is-small">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Relationship Between Acoustic Properties and Fusion</h2>
-    <div class="columns is-centered">
-      <div class="column">
-        <img src="static/images/figure1.PNG" alt="Relationship between Acoustic Properties of Musical Instruments and Fusion Strategies" style="width:90%;">
-        <h2 class="subtitle has-text-centered">
-          Relationship Between Acoustic Properties of Musical Instruments and Fusion Strategies. Instruments with shorter transient properties and simpler harmonic structures are more suited to middle fusion. Conversely, instruments with sustained notes and complex harmonic structures benefit more from late fusion.
-        </h2>
-      </div>
-    </div>
-  </div>
-</section>
+      <!-- ------- Quantitative Results ------- -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h3 class="title is-4">Quantitative Results</h3>
 
-<section class="section hero is-small is-light">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Model Overview</h2>
-    <div class="columns is-centered">
-      <div class="column">
-        <img src="static/images/figure2.PNG" alt="Pipeline of our proposed method" style="width:100%;">
-        <h2 class="subtitle has-text-centered">
-          Pipeline of our proposed method. The pipeline consists of three key components: audio-visual feature extraction, hierarchical fusion, and representation alignment. It takes an audio mixture and corresponding video frames as input.
-        </h2>
-      </div>
-    </div>
-  </div>
-</section>
+          <div class="columns is-centered has-text-centered">
+            <div class="column">
+              <img src="static/images/table1.png" alt="Table 1: Performance comparison on MUSIC dataset">
+              <h2 class="subtitle">Table 1: Audio-visual separation performance comparison on the MUSIC dataset.</h2>
+            </div>
+          </div>
 
-<section class="section hero is-small">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Results</h2>
-
-    <div class="columns is-centered has-text-centered">
-      <div class="column">
-        <h3 class="title is-4">Qualitative Results</h3>
-        <img src="static/images/figure3.PNG" alt="Qualitative Performance on MUSIC dataset" style="width:100%;">
-        <h2 class="subtitle">
-          Qualitative Performance on MUSIC dataset. Our method (the fourth row) produces cleaner and more distinct separated sounds compared to CLIPSep (the third row).
-        </h2>
-      </div>
-    </div>
-    
-    <div class="columns is-centered has-text-centered">
-      <div class="column">
-        <h3 class="title is-4">Quantitative Results</h3>
-        
-        <div class="columns is-centered has-text-centered">
-          <div class="column">
-            <img src="static/images/table1.PNG" alt="Table 1: Performance comparison on MUSIC dataset" style="width:90%;">
-            <h2 class="subtitle">
-              Table 1: Audio-visual separation performance comparison on the MUSIC dataset. 
-            </h2>
+          <div class="columns is-centered has-text-centered">
+            <div class="column">
+              <img src="static/images/table3.png" alt="Table 2: Performance comparison on VGGSound dataset">
+              <h2 class="subtitle">Table 2: Audio-visual separation results on VGGSound.</h2>
+            </div>
           </div>
         </div>
-
-        <div class="columns is-centered has-text-centered">
-          <div class="column">
-            <img src="static/images/table3.PNG" alt="Table 3: Performance comparison on VGGSound dataset"  style="width:90%;">
-            <h2 class="subtitle">
-              Table 2: Audio-visual separation results on VGGSound. 
-            </h2>
-          </div>
-        </div>
-        
       </div>
+
     </div>
+  </section>
 
-  </div>
-</section>
-
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@inproceedings{hu2025audio,
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+<pre><code>@inproceedings{hu2025audio,
   title={Audio-Visual Separation with Hierarchical Fusion and Representation Alignment},
   author={Hu, Han and Lin, Dongheng and Huang, Qiming and Hou, Yuqi and Chang, Hyung Jin and Jiao, Jianbo},
   booktitle={British Machine Vision Conference (BMVC)},
+  year={2025}
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- =============== Scripts for qualitative grid =============== -->
+<!-- =============== Scripts for qualitative grid =============== -->
+<script>
+  // 列配置：label 用于显示（支持 \n 换行），key 用于文件前缀
+  const COLS = [
+  { label: "Mix1: cello\nMix2: clarinet\nQuery: cello", key: "cello" },
+  { label: "Mix1: guitar\nMix2: tuba\nQuery: guitar", key: "guitar" },
+  { label: "Mix1: accordion\nMix2: violin\nQuery: accordion", key: "accordion" },
+  { label: "Mix1: erhu\nMix2: guitar\nQuery: erhu", key: "erhu" },
+  { label: "Mix1: clarinet\nMix2: cello\nQuery: clarinet", key: "clarinet" },
+  ];
+
+
+  const ROWS = ["Query Frames", "Mixed Audio", "CLIPSep", "Ours", "Ground truth"];
+
+  // 行→后缀（Mixed Audio 兼容 _mix / _mixt）
+  const ROW_TO_SUFFIXES = {
+    "Mixed Audio": ["_mix.wav", "_mixt.wav"],
+    "CLIPSep": ["_clip.wav"],
+    "Ours": ["_ours.wav"],
+    "Ground truth": ["_gt.wav"],
+  };
+
+  // 资源目录
+  const IMAGE_BASE = "static/images/";
+  const AUDIO_BASE = "static/audio/";
+
+  const grid = document.getElementById("results-grid");
+
+  // 左上角空单元
+  if (!grid.querySelector(".results-colheader")) {
+    const d = document.createElement("div");
+    d.className = "results-colheader";
+    d.style.visibility = "hidden";
+    d.innerHTML = "&nbsp;";
+    grid.appendChild(d);
+  }
+
+  // 顶部列名（允许 label 内的 \n 生效）
+  // 顶部列名（仅对“Query: accordion”缩小字体）
+const esc = s => String(s).replace(/[&<>"']/g, ch => (
+  {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]
+));
+
+for (const col of COLS) {
+  const el = document.createElement("div");
+  el.className = "results-colheader";
+
+  const parts = String(col.label).split("\n");
+  const l1 = esc(parts[0] || "");
+  const l2 = esc(parts[1] || "");
+  const l3raw = String(parts[2] || "").trim();
+
+  // 如果第三行是“Query: accordion”，就单独缩小字体
+  const isAccordionQuery = /^Query:\s*accordion$/i.test(l3raw);
+  const l3 = isAccordionQuery
+    ? `<span style="font-size:0.85em; line-height:1.1">${esc(l3raw)}</span>`
+    : esc(l3raw);
+
+  // 用 <br> 明确换行
+  el.innerHTML = `${l1}<br>${l2}<br>${l3}`;
+  grid.appendChild(el);
+}
+
+
+  // 生成 5x5 网格（仅进度条，点击即播放）
+  for (let r = 0; r < ROWS.length; r++) {
+    // 行名
+    const rowHeader = document.createElement("div");
+    rowHeader.className = "results-rowheader";
+    rowHeader.textContent = ROWS[r];
+    grid.appendChild(rowHeader);
+
+    for (let c = 0; c < COLS.length; c++) {
+      const rc = `${r + 1}${c + 1}`;   // e.g. "21"
+      const imgBase = `img_${rc}`;     // e.g. img_21
+      const cell = document.createElement("div");
+      cell.className = "result-cell";
+
+      // 图片
+      const img = document.createElement("img");
+      img.alt = `${ROWS[r]} — ${COLS[c].label}`;
+      img.src = IMAGE_BASE + imgBase + ".png";
+      img.onerror = () => {
+        if (!img.dataset.fallbackTried) {
+          img.dataset.fallbackTried = "1";
+          img.src = IMAGE_BASE + imgBase + ".jpg";
+        }
+      };
+      cell.appendChild(img);
+
+      // 第一行 Query Frames 不放进度条；后四行放“仅进度条播放器”
+      if (ROWS[r] !== "Query Frames") {
+        // 候选音频（支持 _mix → _mixt 回退）
+        const key = COLS[c].key;
+        const suffixes = ROW_TO_SUFFIXES[ROWS[r]] || [];
+        const candidates = suffixes.map(suf => new URL(AUDIO_BASE + key + suf, window.location.href).href);
+
+        // 容器（只放进度条）
+        const bar = document.createElement("div");
+        bar.className = "mini-audio";
+        Object.assign(bar.style, {
+          padding: "4px 6px", // 更薄一些
+          background: "rgba(255,255,255,0.9)",
+          border: "1px solid #e6e6e6",
+          borderRadius: "10px",
+          marginTop: "8px"
+        });
+
+        // 进度条（点击即开始播放）
+        const seek = document.createElement("input");
+        seek.type = "range";
+        seek.min = "0";
+        seek.max = "100";
+        seek.step = "0.01";
+        seek.value = "0";
+        seek.className = "mini-seek-slider";      // 去掉 bulma 的 slider 类，便于变瘦
+        Object.assign(seek.style, { width: "100%", height: "16px" }); // 外框更薄；轨道请在 CSS 里细化
+        seek.setAttribute("aria-label", `Seek/Play ${ROWS[r]} — ${COLS[c].key}`);
+        bar.appendChild(seek);
+
+        // 独立 audio
+        const audio = new Audio();
+        audio.preload = "metadata";
+
+        // 候选音频尝试加载
+        let tried = [];
+        const tryCandidates = (idx = 0) =>
+          new Promise((resolve, reject) => {
+            if (idx >= candidates.length) {
+              reject(new Error("音频不存在或格式不被浏览器支持: " + tried.map(u => u.split('/').pop()).join(" → ")));
+              return;
+            }
+            const src = candidates[idx];
+            tried.push(src);
+            const onErr = () => {
+              audio.removeEventListener("error", onErr);
+              tryCandidates(idx + 1).then(resolve).catch(reject);
+            };
+            audio.pause();
+            audio.src = src;
+            audio.currentTime = 0;
+            audio.addEventListener("error", onErr, { once: true });
+            audio.addEventListener("loadedmetadata", () => {
+              audio.removeEventListener("error", onErr);
+              resolve(true);
+            }, { once: true });
+          });
+
+        // 更新进度条
+        const updateSeek = () => {
+          const cur = audio.currentTime || 0;
+          const dur = audio.duration || 0;
+          seek.value = dur ? (cur / dur) * 100 : 0;
+        };
+
+        audio.addEventListener("loadedmetadata", updateSeek);
+        audio.addEventListener("timeupdate", updateSeek);
+        audio.addEventListener("ended", () => {
+          audio.currentTime = 0;
+          updateSeek();
+        });
+
+        // 从点击位置开始播放
+        const startFromPointer = async (clientX) => {
+          try {
+            if (!audio.src) await tryCandidates(0);
+
+            // 暂停其他单元格的音频
+            document.querySelectorAll(".mini-audio").forEach((wrap) => {
+              if (wrap === bar) return;
+              const a = wrap.__miniAudio;
+              if (a && !a.paused) a.pause();
+            });
+
+            const rect = seek.getBoundingClientRect();
+            const pct = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+
+            const setAndPlay = () => {
+              const dur = audio.duration || 0;
+              if (dur) {
+                audio.currentTime = pct * dur;
+                seek.value = pct * 100;
+              }
+              audio.play();
+            };
+
+            if (isFinite(audio.duration) && audio.duration > 0) {
+              setAndPlay();
+            } else {
+              audio.addEventListener("loadedmetadata", function onMeta() {
+                audio.removeEventListener("loadedmetadata", onMeta);
+                setAndPlay();
+              }, { once: true });
+            }
+          } catch (err) {
+            console.error(err);
+            alert(err?.message || "音频无法播放");
+          }
+        };
+
+        // 点击/触摸进度条即开始播放
+        seek.addEventListener("pointerdown", (e) => startFromPointer(e.clientX));
+        // 兼容旧浏览器
+        seek.addEventListener("mousedown", (e) => startFromPointer(e.clientX));
+        seek.addEventListener("touchstart", (e) => {
+          const touch = e.touches && e.touches[0];
+          if (touch) startFromPointer(touch.clientX);
+        }, { passive: true });
+
+        // 拖动进度条进行快进/回退
+        seek.addEventListener("input", () => {
+          const dur = audio.duration || 0;
+          if (!dur) return;
+          const pct = parseFloat(seek.value || "0") / 100;
+          audio.currentTime = pct * dur;
+        });
+
+        // 暴露给容器以便统一暂停
+        bar.__miniAudio = audio;
+
+        // 加入单元格（显示在图片下方）
+        cell.appendChild(bar);
+      }
+
+      grid.appendChild(cell);
+    }
+  }
+</script>
+
+
+  
+  
+  
+
+</body>
+</html>
