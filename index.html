@@ -35,9 +35,8 @@
   <script src="static/js/bulma-slider.min.js"></script>
   <script src="static/js/index.js"></script>
 
-  <!-- Styles for the qualitative results grid -->
   <style>
-    /* 结果网格样式 */
+    /* ===== Qualitative results grid ===== */
     .results-grid {
       display: grid;
       grid-template-columns: 160px repeat(5, minmax(160px, 1fr));
@@ -58,7 +57,6 @@
       border-radius: 10px;
       overflow: hidden;
       border: 1px solid #e6e6e6;
-      /*background: #0a0f20;*/
     }
     .result-cell img {
       width: 100%;
@@ -67,87 +65,90 @@
       object-fit: cover;
       aspect-ratio: 1/1;
     }
-    .play-btn {
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
-      border: none;
-      border-radius: 999px;
-      padding: 8px 12px;
-      background: rgba(0,0,0,0.55);
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
+
+    /* ===== Mini audio player (button + thin seekbar) ===== */
+    .mini-audio {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #e6e6e6;
+      border-radius: 10px;
+      margin-top: 8px;
     }
-    .play-btn:hover { background: rgba(0,0,0,0.7); }
+    .mini-play {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 50%;
+      background: #111827;
+      color: #fff;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .mini-play:hover { background: #000; }
+
+    .mini-seek {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 10px;
+      background: transparent;
+      padding: 0;
+      margin: 0;
+      flex: 1 1 auto;
+    }
+    .mini-seek::-webkit-slider-runnable-track {
+      height: 4px;
+      border-radius: 999px;
+      background: #e5e7eb;
+    }
+    .mini-seek::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #4b5563;
+      margin-top: -4px;
+    }
+    .mini-seek::-moz-range-track {
+      height: 4px; border-radius: 999px; background: #e5e7eb;
+    }
+    .mini-seek::-moz-range-thumb {
+      width: 12px; height: 12px; border-radius: 50%; background: #4b5563; border: none;
+    }
+
+    /* ===== icon + text line in column headers ===== */
+    .inst-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      line-height: 1.2;
+      margin: 2px 0;
+      white-space: nowrap; /* 避免过早换行 */
+    }
+    .inst-icon {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      vertical-align: middle;
+    }
+
     @media (max-width: 820px) {
       .results-grid { grid-template-columns: 120px repeat(5, minmax(120px, 1fr)); }
       .results-colheader, .results-rowheader { font-size: 14px; }
+      .inst-icon { width: 16px; height: 16px; }
     }
-    /* 更瘦的进度条，仅作用于 .mini-seek */
-.mini-seek {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 10px;             /* 元素本身高度（可继续调小） */
-  background: transparent;  /* 透明，下面用 track 来画线 */
-  padding: 0;
-  margin: 0;
-}
-
-/* WebKit (Chrome/Edge/Safari) */
-.mini-seek::-webkit-slider-runnable-track {
-  height: 4px;              /* 轨道厚度 */
-  border-radius: 999px;
-  background: #e5e7eb;      /* 可不改颜色 */
-}
-.mini-seek::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;              /* 拇指大小 */
-  height: px;
-  border-radius: 50%;
-  background: #4b5563;      /* 可不改颜色 */
-  margin-top: -4px;         /* 垂直居中：-(thumb - track)/2 = -(12-4)/2 */
-}
-
-/* Firefox */
-.mini-seek::-moz-range-track {
-  height: 4px;
-  border-radius: 999px;
-  background: #e5e7eb;
-}
-.mini-seek::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #4b5563;
-  border: none;
-}
-
-/* 旧版 IE/Edge (可选) */
-.mini-seek::-ms-track {
-  height: 4px;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-.mini-seek::-ms-fill-lower,
-.mini-seek::-ms-fill-upper {
-  height: 4px;
-  border-radius: 999px;
-  background: #e5e7eb;
-}
-.mini-seek::-ms-thumb {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #4b5563;
-}
-
   </style>
 </head>
 <body>
 
+  <!-- ===================== HERO ===================== -->
   <section class="hero">
     <div class="hero-body">
       <div class="container is-max-desktop">
@@ -176,6 +177,11 @@
                   </a>
                 </span>
                 <span class="link-block">
+                  <a href="https://arxiv.org/abs/2509.00000" target="_blank" class="external-link button is-normal is-rounded is-dark" aria-label="arXiv">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
                   <a href="https://github.com/happy-new-bears/AVSep-HFRA" target="_blank" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
                   </a>
@@ -189,19 +195,7 @@
     </div>
   </section>
 
-      <!-- ===================== TEASER VIDEO ===================== -->
-      <section class="hero teaser">
-        <div class="container is-max-desktop">
-          <div class="hero-body has-text-centered">
-            <video poster="" autoplay controls muted loop style="width:80%; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-              <source src="static/videos/demo_video.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-      </section>
-      <!-- =================== END TEASER VIDEO ==================== -->
-
+  <!-- ===================== ABSTRACT ===================== -->
   <section class="section hero is-light">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
@@ -217,16 +211,14 @@
     </div>
   </section>
 
-
-  
-
+  <!-- ===================== FIGURES ===================== -->
   <section class="section hero is-small">
     <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Relationship Between Acoustic Properties and Fusion</h2>
+      <h2 class="title is-3" style="text-align:center;">Relationship Between Acoustic Properties and Fusion</h2>
       <div class="columns is-centered">
         <div class="column">
           <img src="static/images/figure1.png" alt="Relationship between Acoustic Properties of Musical Instruments and Fusion Strategies" style="width:100%;">
-          <h2 class="subtitle has-text-centered">
+          <h2 class="subtitle" style="text-align:center;">
             Relationship Between Acoustic Properties of Musical Instruments and Fusion Strategies. Instruments with shorter transient properties and simpler harmonic structures are more suited to middle fusion. Conversely, instruments with sustained notes and complex harmonic structures benefit more from late fusion.
           </h2>
         </div>
@@ -236,11 +228,11 @@
 
   <section class="section hero is-small is-light">
     <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Model Overview</h2>
+      <h2 class="title is-3" style="text-align:center;">Model Overview</h2>
       <div class="columns is-centered">
         <div class="column">
           <img src="static/images/figure2.png" alt="Pipeline of our proposed method" style="width:100%;">
-          <h2 class="subtitle has-text-centered">
+          <h2 class="subtitle" style="text-align:center;">
             Pipeline of our proposed method. The pipeline consists of three key components: audio-visual feature extraction, hierarchical fusion, and representation alignment. It takes an audio mixture and corresponding video frames as input.
           </h2>
         </div>
@@ -251,26 +243,24 @@
   <!-- ===================== RESULTS ===================== -->
   <section class="section hero is-small">
     <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Results</h2>
+      <h2 class="title is-3" style="text-align:center;">Results</h2>
 
-      <!-- ------- Qualitative Results (with audio buttons) ------- -->
+      <!-- ------- Qualitative Results (with audio controls) ------- -->
       <div class="columns is-centered has-text-centered">
         <div class="column">
           <h3 class="title is-4">Qualitative Results</h3>
 
           <!-- Grid container -->
           <div id="results-grid" class="results-grid" aria-label="Qualitative Results Grid">
-            <!-- 顶部左上角空白占位 -->
             <div class="results-colheader" style="visibility:hidden;">&nbsp;</div>
-            <!-- 顶部列名会由脚本填充 -->
           </div>
 
-          <p class="subtitle">
-            Click ●  to play the audio example. Our method (row “Ours”) produces cleaner separated sounds than CLIPSep.
+          <p class="subtitle" style="margin-top:8px;">
+            Click ▶ / pause to control audio. Our method (row “Ours”) produces cleaner separated sounds than CLIPSep.
           </p>
 
-          <!-- 一个共享的音频播放器 -->
-          <audio id="av-player" preload="none"></audio>
+          <!-- Shared audio element (not used, reserved for future) -->
+          <audio id="av-player" preload="none" style="display:none;"></audio>
         </div>
       </div>
 
@@ -281,15 +271,15 @@
 
           <div class="columns is-centered has-text-centered">
             <div class="column">
-              <img src="static/images/table1.png" alt="Table 1: Performance comparison on MUSIC dataset">
-              <h2 class="subtitle">Table 1: Audio-visual separation performance comparison on the MUSIC dataset.</h2>
+              <img src="static/images/table1.png" alt="Table 1: Performance comparison on MUSIC dataset" style="width:80%; height:auto;">
+              <h2 class="subtitle">Audio-visual separation performance comparison on the MUSIC dataset.</h2>
             </div>
           </div>
 
           <div class="columns is-centered has-text-centered">
             <div class="column">
-              <img src="static/images/table3.png" alt="Table 2: Performance comparison on VGGSound dataset">
-              <h2 class="subtitle">Table 2: Audio-visual separation results on VGGSound.</h2>
+              <img src="static/images/table3.png" alt="Table 2: Performance comparison on VGGSound dataset" style="width:80%; height:auto;">
+              <h2 class="subtitle">Audio-visual separation results on VGGSound dataset.</h2>
             </div>
           </div>
         </div>
@@ -298,6 +288,7 @@
     </div>
   </section>
 
+  <!-- ===================== BIBTEX ===================== -->
   <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
@@ -310,240 +301,270 @@
     </div>
   </section>
 
-  <!-- =============== Scripts for qualitative grid =============== -->
-<!-- =============== Scripts for qualitative grid =============== -->
-<script>
-  // 列配置：label 用于显示（支持 \n 换行），key 用于文件前缀
-  const COLS = [
-  { label: "Mix1: cello\nMix2: clarinet\nQuery: cello", key: "cello" },
-  { label: "Mix1: guitar\nMix2: tuba\nQuery: guitar", key: "guitar" },
-  { label: "Mix1: accordion\nMix2: violin\nQuery: accordion", key: "accordion" },
-  { label: "Mix1: erhu\nMix2: guitar\nQuery: erhu", key: "erhu" },
-  { label: "Mix1: clarinet\nMix2: cello\nQuery: clarinet", key: "clarinet" },
-  ];
+  <!-- ===================== QUAL GRID SCRIPT ===================== -->
+  <script>
+    // 乐器名 → 图标路径（请确保这些文件存在于 static/images/ 下）
+    const ICONS = {
+      cello:     "static/images/cello.png",
+      clarinet:  "static/images/clarinet.png",
+      guitar:    "static/images/guitar.png",
+      tuba:      "static/images/tuba.png",
+      accordion: "static/images/accordion.png",
+      violin:    "static/images/violin.png",
+      erhu:      "static/images/erhu.png",
+      // 需要更多就继续在这里添加
+    };
 
+    // 列配置：label 用于显示（支持 \n 换行），key 用于资源前缀
+    const COLS = [
+      { label: "Mix1: cello\nMix2: clarinet\nQuery: cello", key: "cello" },
+      { label: "Mix1: guitar\nMix2: tuba\nQuery: guitar", key: "guitar" },
+      { label: "Mix1: accordion\nMix2: violin\nQuery: accordion", key: "accordion" },
+      { label: "Mix1: erhu\nMix2: guitar\nQuery: erhu", key: "erhu" },
+      { label: "Mix1: clarinet\nMix2: cello\nQuery: clarinet", key: "clarinet" },
+    ];
+    const ROWS = ["Query Frames", "Mixed Audio", "CLIPSep", "Ours", "Ground truth"];
 
-  const ROWS = ["Query Frames", "Mixed Audio", "CLIPSep", "Ours", "Ground truth"];
+    // 行→后缀（Mixed Audio 兼容 _mix / _mixt）
+    const ROW_TO_SUFFIXES = {
+      "Mixed Audio": ["_mix.wav", "_mixt.wav"],
+      "CLIPSep": ["_clip.wav"],
+      "Ours": ["_ours.wav"],
+      "Ground truth": ["_gt.wav"],
+    };
 
-  // 行→后缀（Mixed Audio 兼容 _mix / _mixt）
-  const ROW_TO_SUFFIXES = {
-    "Mixed Audio": ["_mix.wav", "_mixt.wav"],
-    "CLIPSep": ["_clip.wav"],
-    "Ours": ["_ours.wav"],
-    "Ground truth": ["_gt.wav"],
-  };
+    const IMAGE_BASE = "static/images/";
+    const AUDIO_BASE = "static/audio/";
 
-  // 资源目录
-  const IMAGE_BASE = "static/images/";
-  const AUDIO_BASE = "static/audio/";
+    const grid = document.getElementById("results-grid");
 
-  const grid = document.getElementById("results-grid");
+    // 左上角占位（隐藏）
+    if (!grid.querySelector(".results-colheader")) {
+      const d = document.createElement("div");
+      d.className = "results-colheader";
+      d.style.visibility = "hidden";
+      d.innerHTML = "&nbsp;";
+      grid.appendChild(d);
+    }
 
-  // 左上角空单元
-  if (!grid.querySelector(".results-colheader")) {
-    const d = document.createElement("div");
-    d.className = "results-colheader";
-    d.style.visibility = "hidden";
-    d.innerHTML = "&nbsp;";
-    grid.appendChild(d);
-  }
+    const esc = s => String(s).replace(/[&<>"']/g, ch => (
+      {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[ch]
+    ));
 
-  // 顶部列名（允许 label 内的 \n 生效）
-  // 顶部列名（仅对“Query: accordion”缩小字体）
-const esc = s => String(s).replace(/[&<>"']/g, ch => (
-  {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]
-));
+    // 顶部列名（带 icon）
+    for (const col of COLS) {
+      const el = document.createElement("div");
+      el.className = "results-colheader";
 
-for (const col of COLS) {
-  const el = document.createElement("div");
-  el.className = "results-colheader";
-
-  const parts = String(col.label).split("\n");
-  const l1 = esc(parts[0] || "");
-  const l2 = esc(parts[1] || "");
-  const l3raw = String(parts[2] || "").trim();
-
-  // 如果第三行是“Query: accordion”，就单独缩小字体
-  const isAccordionQuery = /^Query:\s*accordion$/i.test(l3raw);
-  const l3 = isAccordionQuery
-    ? `<span style="font-size:0.85em; line-height:1.1">${esc(l3raw)}</span>`
-    : esc(l3raw);
-
-  // 用 <br> 明确换行
-  el.innerHTML = `${l1}<br>${l2}<br>${l3}`;
-  grid.appendChild(el);
-}
-
-
-  // 生成 5x5 网格（仅进度条，点击即播放）
-  for (let r = 0; r < ROWS.length; r++) {
-    // 行名
-    const rowHeader = document.createElement("div");
-    rowHeader.className = "results-rowheader";
-    rowHeader.textContent = ROWS[r];
-    grid.appendChild(rowHeader);
-
-    for (let c = 0; c < COLS.length; c++) {
-      const rc = `${r + 1}${c + 1}`;   // e.g. "21"
-      const imgBase = `img_${rc}`;     // e.g. img_21
-      const cell = document.createElement("div");
-      cell.className = "result-cell";
-
-      // 图片
-      const img = document.createElement("img");
-      img.alt = `${ROWS[r]} — ${COLS[c].label}`;
-      img.src = IMAGE_BASE + imgBase + ".png";
-      img.onerror = () => {
-        if (!img.dataset.fallbackTried) {
-          img.dataset.fallbackTried = "1";
-          img.src = IMAGE_BASE + imgBase + ".jpg";
-        }
+      const parts = String(col.label).split("\n");  // 预期三行
+      const parseLine = (line) => {
+        const m = String(line).split(":");
+        const label = (m[0] || "").trim();
+        const name = (m[1] || "").trim();
+        return { label, name };
       };
-      cell.appendChild(img);
 
-      // 第一行 Query Frames 不放进度条；后四行放“仅进度条播放器”
-      if (ROWS[r] !== "Query Frames") {
-        // 候选音频（支持 _mix → _mixt 回退）
-        const key = COLS[c].key;
-        const suffixes = ROW_TO_SUFFIXES[ROWS[r]] || [];
-        const candidates = suffixes.map(suf => new URL(AUDIO_BASE + key + suf, window.location.href).href);
+      for (let i = 0; i < parts.length; i++) {
+        const { label, name } = parseLine(parts[i]);
+        const row = document.createElement("div");
+        row.className = "inst-line";
 
-        // 容器（只放进度条）
-        const bar = document.createElement("div");
-        bar.className = "mini-audio";
-        Object.assign(bar.style, {
-          padding: "4px 6px", // 更薄一些
-          background: "rgba(255,255,255,0.9)",
-          border: "1px solid #e6e6e6",
-          borderRadius: "10px",
-          marginTop: "8px"
-        });
+        const prefix = document.createElement("span");
+        prefix.textContent = label + ":";
+        row.appendChild(prefix);
 
-        // 进度条（点击即开始播放）
-        const seek = document.createElement("input");
-        seek.type = "range";
-        seek.min = "0";
-        seek.max = "100";
-        seek.step = "0.01";
-        seek.value = "0";
-        seek.className = "mini-seek-slider";      // 去掉 bulma 的 slider 类，便于变瘦
-        Object.assign(seek.style, { width: "100%", height: "16px" }); // 外框更薄；轨道请在 CSS 里细化
-        seek.setAttribute("aria-label", `Seek/Play ${ROWS[r]} — ${COLS[c].key}`);
-        bar.appendChild(seek);
+        const key = name.toLowerCase();
+        const iconSrc = ICONS[key];
+        if (iconSrc) {
+          const icon = document.createElement("img");
+          icon.className = "inst-icon";
+          icon.src = iconSrc;
+          icon.alt = name;
+          icon.loading = "lazy";
+          row.appendChild(icon);
+        }
 
-        // 独立 audio
-        const audio = new Audio();
-        audio.preload = "metadata";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = " " + name;
+        row.appendChild(nameSpan);
 
-        // 候选音频尝试加载
-        let tried = [];
-        const tryCandidates = (idx = 0) =>
-          new Promise((resolve, reject) => {
-            if (idx >= candidates.length) {
-              reject(new Error("音频不存在或格式不被浏览器支持: " + tried.map(u => u.split('/').pop()).join(" → ")));
-              return;
-            }
-            const src = candidates[idx];
-            tried.push(src);
-            const onErr = () => {
-              audio.removeEventListener("error", onErr);
-              tryCandidates(idx + 1).then(resolve).catch(reject);
-            };
-            audio.pause();
-            audio.src = src;
-            audio.currentTime = 0;
-            audio.addEventListener("error", onErr, { once: true });
-            audio.addEventListener("loadedmetadata", () => {
-              audio.removeEventListener("error", onErr);
-              resolve(true);
-            }, { once: true });
+        el.appendChild(row);
+      }
+
+      grid.appendChild(el);
+    }
+
+    // 生成网格内容
+    for (let r = 0; r < ROWS.length; r++) {
+      // 行名
+      const rowHeader = document.createElement("div");
+      rowHeader.className = "results-rowheader";
+      rowHeader.textContent = ROWS[r];
+      grid.appendChild(rowHeader);
+
+      for (let c = 0; c < COLS.length; c++) {
+        const rc = `${r + 1}${c + 1}`; // e.g. "21"
+        const imgBase = `img_${rc}`;   // e.g. img_21
+        const cell = document.createElement("div");
+        cell.className = "result-cell";
+
+        // 图片
+        const img = document.createElement("img");
+        img.alt = `${ROWS[r]} — ${COLS[c].label}`;
+        img.src = IMAGE_BASE + imgBase + ".png";
+        img.onerror = () => {
+          if (!img.dataset.fallbackTried) {
+            img.dataset.fallbackTried = "1";
+            img.src = IMAGE_BASE + imgBase + ".jpg";
+          }
+        };
+        cell.appendChild(img);
+
+        // 第一行不放播放器
+        if (ROWS[r] !== "Query Frames") {
+          const key = COLS[c].key;
+          const suffixes = ROW_TO_SUFFIXES[ROWS[r]] || [];
+          const candidates = suffixes.map(suf => new URL(AUDIO_BASE + key + suf, window.location.href).href);
+
+          const bar = document.createElement("div");
+          bar.className = "mini-audio";
+
+          const btn = document.createElement("button");
+          btn.className = "mini-play";
+          btn.setAttribute("aria-label", `Play ${ROWS[r]} — ${COLS[c].key}`);
+          btn.innerHTML = '<i class="fas fa-play"></i>';
+          bar.appendChild(btn);
+
+          const seek = document.createElement("input");
+          seek.type = "range";
+          seek.min = "0"; seek.max = "100"; seek.step = "0.01"; seek.value = "0";
+          seek.className = "mini-seek";
+          seek.setAttribute("aria-label", `Seek ${ROWS[r]} — ${COLS[c].key}`);
+          bar.appendChild(seek);
+
+          const audio = new Audio();
+          audio.preload = "metadata";
+
+          let tried = [];
+          const tryCandidates = (idx = 0) =>
+            new Promise((resolve, reject) => {
+              if (idx >= candidates.length) {
+                reject(new Error("音频不存在或格式不被浏览器支持: " + tried.map(u => u.split('/').pop()).join(" → ")));
+                return;
+              }
+              const src = candidates[idx];
+              tried.push(src);
+              const onErr = () => {
+                audio.removeEventListener("error", onErr);
+                tryCandidates(idx + 1).then(resolve).catch(reject);
+              };
+              audio.pause();
+              audio.src = src;
+              audio.currentTime = 0;
+              audio.addEventListener("error", onErr, { once: true });
+              audio.addEventListener("loadedmetadata", () => {
+                audio.removeEventListener("error", onErr);
+                resolve(true);
+              }, { once: true });
+            });
+
+          const updateSeek = () => {
+            const cur = audio.currentTime || 0;
+            const dur = audio.duration || 0;
+            seek.value = dur ? (cur / dur) * 100 : 0;
+          };
+
+          const setBtnState = () => {
+            btn.innerHTML = audio.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';
+            btn.setAttribute("aria-label", (audio.paused ? "Play " : "Pause ") + `${ROWS[r]} — ${COLS[c].key}`);
+          };
+
+          audio.addEventListener("loadedmetadata", updateSeek);
+          audio.addEventListener("timeupdate", updateSeek);
+          audio.addEventListener("play", setBtnState);
+          audio.addEventListener("pause", setBtnState);
+          audio.addEventListener("ended", () => {
+            audio.currentTime = 0; updateSeek(); setBtnState();
           });
 
-        // 更新进度条
-        const updateSeek = () => {
-          const cur = audio.currentTime || 0;
-          const dur = audio.duration || 0;
-          seek.value = dur ? (cur / dur) * 100 : 0;
-        };
-
-        audio.addEventListener("loadedmetadata", updateSeek);
-        audio.addEventListener("timeupdate", updateSeek);
-        audio.addEventListener("ended", () => {
-          audio.currentTime = 0;
-          updateSeek();
-        });
-
-        // 从点击位置开始播放
-        const startFromPointer = async (clientX) => {
-          try {
-            if (!audio.src) await tryCandidates(0);
-
-            // 暂停其他单元格的音频
+          const pauseOthers = () => {
             document.querySelectorAll(".mini-audio").forEach((wrap) => {
               if (wrap === bar) return;
               const a = wrap.__miniAudio;
               if (a && !a.paused) a.pause();
             });
+          };
 
-            const rect = seek.getBoundingClientRect();
-            const pct = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
-
-            const setAndPlay = () => {
-              const dur = audio.duration || 0;
-              if (dur) {
-                audio.currentTime = pct * dur;
-                seek.value = pct * 100;
+          btn.addEventListener("click", async () => {
+            try {
+              if (!audio.src) await tryCandidates(0);
+              if (audio.paused) {
+                pauseOthers();
+                await audio.play();
+              } else {
+                audio.pause();
               }
-              audio.play();
-            };
-
-            if (isFinite(audio.duration) && audio.duration > 0) {
-              setAndPlay();
-            } else {
-              audio.addEventListener("loadedmetadata", function onMeta() {
-                audio.removeEventListener("loadedmetadata", onMeta);
-                setAndPlay();
-              }, { once: true });
+            } catch (err) {
+              console.error(err);
+              alert(err?.message || "音频无法播放");
             }
-          } catch (err) {
-            console.error(err);
-            alert(err?.message || "音频无法播放");
-          }
-        };
+          });
 
-        // 点击/触摸进度条即开始播放
-        seek.addEventListener("pointerdown", (e) => startFromPointer(e.clientX));
-        // 兼容旧浏览器
-        seek.addEventListener("mousedown", (e) => startFromPointer(e.clientX));
-        seek.addEventListener("touchstart", (e) => {
-          const touch = e.touches && e.touches[0];
-          if (touch) startFromPointer(touch.clientX);
-        }, { passive: true });
+          const startFromPointer = async (clientX) => {
+            try {
+              if (!audio.src) await tryCandidates(0);
+              pauseOthers();
 
-        // 拖动进度条进行快进/回退
-        seek.addEventListener("input", () => {
-          const dur = audio.duration || 0;
-          if (!dur) return;
-          const pct = parseFloat(seek.value || "0") / 100;
-          audio.currentTime = pct * dur;
-        });
+              const rect = seek.getBoundingClientRect();
+              const pct = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
 
-        // 暴露给容器以便统一暂停
-        bar.__miniAudio = audio;
+              const setAndPlay = () => {
+                const dur = audio.duration || 0;
+                if (dur) {
+                  audio.currentTime = pct * dur;
+                  seek.value = pct * 100;
+                }
+                audio.play();
+              };
 
-        // 加入单元格（显示在图片下方）
-        cell.appendChild(bar);
+              if (isFinite(audio.duration) && audio.duration > 0) {
+                setAndPlay();
+              } else {
+                audio.addEventListener("loadedmetadata", function onMeta() {
+                  audio.removeEventListener("loadedmetadata", onMeta);
+                  setAndPlay();
+                }, { once: true });
+              }
+            } catch (err) {
+              console.error(err);
+              alert(err?.message || "音频无法播放");
+            }
+          };
+
+          seek.addEventListener("pointerdown", (e) => startFromPointer(e.clientX));
+          seek.addEventListener("mousedown", (e) => startFromPointer(e.clientX));
+          seek.addEventListener("touchstart", (e) => {
+            const t = e.touches && e.touches[0];
+            if (t) startFromPointer(t.clientX);
+          }, { passive: true });
+
+          seek.addEventListener("input", () => {
+            const dur = audio.duration || 0;
+            if (!dur) return;
+            const pct = parseFloat(seek.value || "0") / 100;
+            audio.currentTime = pct * dur;
+          });
+
+          bar.__miniAudio = audio;
+
+          cell.appendChild(bar);
+          setBtnState();
+        }
+
+        grid.appendChild(cell);
       }
-
-      grid.appendChild(cell);
     }
-  }
-</script>
-
-
-  
-  
-  
+  </script>
 
 </body>
 </html>
